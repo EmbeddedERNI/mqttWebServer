@@ -82,13 +82,14 @@ func ServeWS(w http.ResponseWriter, r *http.Request) {
 	if token := session.mqtt.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
-	if token := session.mqtt.Subscribe("$aws/things/+/shadow/update/accepted", 0, f); token.Wait() && token.Error() != nil {
+
+	if token := session.mqtt.Subscribe("$aws/things/+/shadow/update/accepted", 1, f); token.Wait() && token.Error() != nil {
 		log.Println(token.Error())
 		return
 		os.Exit(1)
 	}
 
-	if token := session.mqtt.Subscribe("$aws/things/+/shadow/get/accepted", 0, f); token.Wait() && token.Error() != nil {
+	if token := session.mqtt.Subscribe("$aws/things/+/shadow/get/accepted", 1, f); token.Wait() && token.Error() != nil {
 		log.Println(token.Error())
 		return
 		os.Exit(1)
@@ -127,7 +128,7 @@ func ServeWS(w http.ResponseWriter, r *http.Request) {
 							return
 						}
 						log.Printf("UPDATING: %s", jsonpayload)
-						if token := session.mqtt.Publish("$aws/things/"+value.(string)+"/shadow/update", 0, false, string(jsonpayload)); token.Wait() && token.Error() != nil {
+						if token := session.mqtt.Publish("$aws/things/"+value.(string)+"/shadow/update", 1, false, string(jsonpayload)); token.Wait() && token.Error() != nil {
 							log.Println(token.Error())
 							return
 							os.Exit(1)
