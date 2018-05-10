@@ -115,7 +115,7 @@ func ServeWS(w http.ResponseWriter, r *http.Request) {
 			if action, ok := data["action"]; ok {
 				switch action {
 				case "get":
-					if token := session.mqtt.Publish("$aws/things/"+value.(string)+"/shadow/get", 0, false, ""); token.Wait() && token.Error() != nil {
+					if token := session.mqtt.Publish("$aws/things/"+value.(string)+"/shadow/get", 1, false, ""); token.Wait() && token.Error() != nil {
 						log.Println(token.Error())
 						return
 						os.Exit(1)
